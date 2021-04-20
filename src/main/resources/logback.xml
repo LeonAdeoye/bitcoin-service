@@ -1,10 +1,8 @@
 <configuration scan="true" scanPeriod="300 seconds" >
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <!--TODO rename log file name-->
-        <file>../logs/quick-start.log</file>
+        <file>../logs/bitcoin.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <!--TODO rename log file name-->
-            <fileNamePattern>../logs/quick-start.log.%d{yyyy-MM-dd}</fileNamePattern>
+            <fileNamePattern>../logs/bitcoin.log.%d{yyyy-MM-dd}</fileNamePattern>
             <maxHistory>8</maxHistory>
             <totalSizeCap>3GB</totalSizeCap>
         </rollingPolicy>

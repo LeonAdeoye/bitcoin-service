@@ -1,6 +1,7 @@
 package com.leon.controllers;
 
 import com.leon.services.ConfigurationService;
+import com.leon.services.WalletService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,6 +15,8 @@ public class MainController
     private static final Logger logger = LoggerFactory.getLogger(MainController.class);
     @Autowired
     private ConfigurationService configurationService;
+    @Autowired
+    private WalletService walletService;
 
     @RequestMapping("/heartbeat")
     public String heartBeat()
@@ -30,4 +33,14 @@ public class MainController
         logger.info("Received request to reconfigure.");
         this.configurationService.reconfigure();
     }
+
+    @CrossOrigin
+    @RequestMapping("/init")
+    public void init()
+    {
+        logger.info("Received request to initialize wallet service.");
+        this.walletService.initialise();
+    }
+
+
 }
