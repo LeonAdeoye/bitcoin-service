@@ -6,6 +6,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import org.bitcoinj.core.ECKey;
+
+import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,10 +31,10 @@ public class KeyServiceImpl implements KeyService
         return key.getPublicKeyAsHex();
     }
 
-    public static String derivePublicKeyHexFromPrivateKeyHex(String privateKeyHex, boolean compressed)
+    public static String derivePublicKeyHexFromPrivateKeyHex(String privateKeyHex)
     {
-        ECKey newKey = ECKey.fromPrivate(convertHexToByteArray(privateKeyHex), compressed);
-        logger.info("Created public key: {} from private key hex: {}", newKey, privateKeyHex);
+        ECKey newKey = ECKey.fromPrivate(new BigInteger(privateKeyHex, 16));
+        logger.info("Created public key: {} from private key hex: {}", newKey.getPublicKeyAsHex(), privateKeyHex);
         return newKey.getPublicKeyAsHex();
     }
 

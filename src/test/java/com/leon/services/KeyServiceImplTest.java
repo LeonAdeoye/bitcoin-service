@@ -6,7 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.bitcoinj.core.ECKey;
 
+
+import java.math.BigInteger;
 import java.util.Arrays;
 
 import static org.junit.Assert.assertEquals;
@@ -24,6 +27,7 @@ public class KeyServiceImplTest
     {
         // Act
         String publicKey = this.keyService.createNewKey();
+
         // Assert
         assertEquals("public key should be 2 compressed/uncompressed digits prefix of 03/04/02 plus 64 digits in length", 66, publicKey.length());
     }
@@ -31,10 +35,13 @@ public class KeyServiceImplTest
     @Test
     public void derivePublicKeyHexFromPrivateKeyHex_whenPassedValidPrivateKeyHex_shouldReturnValidPublicKeyHex()
     {
+        // Arrange
+        ECKey key = new ECKey();
+        String privateKey = key.getPrivateKeyAsHex();
         // Act
-        String result = KeyServiceImpl.derivePublicKeyHexFromPrivateKeyHex("692c82187c51836b2beb16a614ee4d2a08bdc44800312ec72224119dc6fb2b6c", true);
+        String result = KeyServiceImpl.derivePublicKeyHexFromPrivateKeyHex(privateKey);
         // Assert
-        assertEquals("should return valid byte array", result, "03908a2fff182e5719c50e543ad67a345c37ae7258bb0cd9cdb59dfc5f20902100");
+        assertEquals("should return valid public key from private key", result, key.getPublicKeyAsHex());
     }
 
     @Test

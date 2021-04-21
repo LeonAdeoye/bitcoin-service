@@ -74,12 +74,12 @@ public class KeyController
 
         logger.info("Received request to convert hexadecimal key: " + keyHex + " to a byte array.");
         byte[] result = KeyServiceImpl.convertHexToByteArray(keyHex);
-        return result.toString() + " >> "  + Arrays.toString(result);
+        return result.toString();
     }
 
     @CrossOrigin
     @RequestMapping(value = "/derivePublicKey", method=GET)
-    public String derivePublicKeyHexFromPrivateKeyHex(@RequestParam String privateKeyHex, @RequestParam boolean compressed) throws IllegalArgumentException
+    public String derivePublicKeyHexFromPrivateKeyHex(@RequestParam String privateKeyHex) throws IllegalArgumentException
     {
         if(privateKeyHex == null || privateKeyHex.isEmpty())
         {
@@ -88,7 +88,7 @@ public class KeyController
         }
 
         logger.info("Received request to derive public key from private key hex: " + privateKeyHex);
-        return KeyServiceImpl.derivePublicKeyHexFromPrivateKeyHex(privateKeyHex, compressed);
+        return KeyServiceImpl.derivePublicKeyHexFromPrivateKeyHex(privateKeyHex);
     }
 
 }
