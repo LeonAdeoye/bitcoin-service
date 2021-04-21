@@ -17,7 +17,7 @@
     </appender>
     <logger name="com.leon.controllers" level="DEBUG" additivity="false"/>
     <logger name="com.leon.services" level="DEBUG" additivity="false"/>
-    <root level="ERROR">
+    <root level="DEBUG">
         <appender-ref ref="STDOUT" />
         <appender-ref ref="FILE" />
     </root>
