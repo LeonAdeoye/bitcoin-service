@@ -29,6 +29,22 @@ public class KeyServiceImpl implements KeyService
         return key.getPublicKeyAsHex();
     }
 
+    public static String createPublicKeyHexFromPrivateKeyHex(String privateKeyHex, boolean compressed)
+    {
+        byte[] privateKeyByteArray = createPrivateKeyByteArray(privateKeyHex);
+        ECKey newKey = ECKey.fromPrivate(privateKeyByteArray, compressed);
+        logger.info("Created public key: {} from private key hex: {}", newKey, privateKeyHex);
+        return newKey.getPublicKeyAsHex();
+    }
+
+    private static byte[] createPrivateKeyByteArray(String privateKey)
+    {
+        byte[] privateKeyByteArray = new byte[privateKey.length()/2];
+        for(int index = 0; index < privateKeyByteArray.length; ++index)
+            privateKeyByteArray[index] = (byte) Integer.parseInt(privateKey.substring(index, index + 2), 16);
+        return privateKeyByteArray;
+    }
+
     @Override
     public String getPrivateKeyHex(String publicKeyHex)
     {

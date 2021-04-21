@@ -1,8 +1,8 @@
 <configuration scan="true" scanPeriod="300 seconds" >
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>../logs/bitcoin.log</file>
+        <file>../logs/bitcoin-service.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>../logs/bitcoin.log.%d{yyyy-MM-dd}</fileNamePattern>
+            <fileNamePattern>../logs/bitcoin-service.log.%d{yyyy-MM-dd}</fileNamePattern>
             <maxHistory>8</maxHistory>
             <totalSizeCap>3GB</totalSizeCap>
         </rollingPolicy>

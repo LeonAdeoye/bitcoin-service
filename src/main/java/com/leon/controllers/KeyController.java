@@ -2,6 +2,7 @@ package com.leon.controllers;
 
 import com.leon.services.ConfigurationService;
 import com.leon.services.KeyService;
+import com.leon.services.KeyServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,7 +36,7 @@ public class KeyController
     public String getPrivateKeyHex(@RequestParam String publicKeyHex) throws IllegalArgumentException
     {
         if(publicKeyHex == null || publicKeyHex.isEmpty())
-            throw new IllegalArgumentException("public key hex cannot be null or empty");
+            throw new IllegalArgumentException("public key hex cannot be null or empty.");
 
         logger.info("Received request to get private key in HEX");
         return this.keyService.getPrivateKeyHex(publicKeyHex);
@@ -47,10 +48,21 @@ public class KeyController
     public String getPrivateKeyWIF(@RequestParam String publicKeyHex) throws IllegalArgumentException
     {
         if(publicKeyHex == null || publicKeyHex.isEmpty())
-            throw new IllegalArgumentException("public key hex cannot be null or empty");
+            throw new IllegalArgumentException("public key hex cannot be null or empty.");
 
         logger.info("Received request to get private key WIF");
         return this.keyService.getPrivateKeyWIF(publicKeyHex);
+    }
+
+    @CrossOrigin
+    @RequestMapping(value = "/derivePrivateKey", method=GET)
+    public String derivePublicKeyHexFromPrivateKeyHex(@RequestParam String privateKeyHex, @RequestParam boolean compressed) throws IllegalArgumentException
+    {
+        if(privateKeyHex == null || privateKeyHex.isEmpty())
+            throw new IllegalArgumentException("private key hex cannot be null or empty.");
+
+        logger.info("Received request to derive public key from: " + privateKeyHex);
+        return KeyServiceImpl.createPublicKeyHexFromPrivateKeyHex(privateKeyHex, compressed);
     }
 
 }
