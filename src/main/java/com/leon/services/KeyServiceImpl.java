@@ -21,11 +21,12 @@ public class KeyServiceImpl implements KeyService
     }
 
     @Override
-    public void createNewKey()
+    public String createNewKey()
     {
         ECKey key = new ECKey();
         logger.info("Created new key:\n" + key);
         keys.put(key.getPublicKeyAsHex(), key);
+        return key.getPublicKeyAsHex();
     }
 
     @Override

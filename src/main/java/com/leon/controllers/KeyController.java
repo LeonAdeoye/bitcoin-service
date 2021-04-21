@@ -23,11 +23,11 @@ public class KeyController
 
 
     @CrossOrigin
-    @RequestMapping("/create")
-    public void createNewKey()
+    @RequestMapping("/createNewKey")
+    public String createNewKey()
     {
         logger.info("Received request to create new key");
-        this.keyService.createNewKey();
+        return this.keyService.createNewKey();
     }
 
     @CrossOrigin
