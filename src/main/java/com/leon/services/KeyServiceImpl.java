@@ -29,7 +29,7 @@ public class KeyServiceImpl implements KeyService
         return key.getPublicKeyAsHex();
     }
 
-    public static String createPublicKeyHexFromPrivateKeyHex(String privateKeyHex, boolean compressed)
+    public static String derivePublicKeyHexFromPrivateKeyHex(String privateKeyHex, boolean compressed)
     {
         byte[] privateKeyByteArray = createPrivateKeyByteArray(privateKeyHex);
         ECKey newKey = ECKey.fromPrivate(privateKeyByteArray, compressed);

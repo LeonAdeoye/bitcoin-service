@@ -27,7 +27,7 @@ public class KeyController
     @RequestMapping("/createNewKey")
     public String createNewKey()
     {
-        logger.info("Received request to create new key");
+        logger.info("Received request to create new key.");
         return this.keyService.createNewKey();
     }
 
@@ -36,9 +36,12 @@ public class KeyController
     public String getPrivateKeyHex(@RequestParam String publicKeyHex) throws IllegalArgumentException
     {
         if(publicKeyHex == null || publicKeyHex.isEmpty())
-            throw new IllegalArgumentException("public key hex cannot be null or empty.");
+        {
+            logger.error("Public key hex cannot be null or empty.");
+            throw new IllegalArgumentException("Public key hex cannot be null or empty.");
+        }
 
-        logger.info("Received request to get private key in HEX");
+        logger.info("Received request to get private key in HEX using public key: " + publicKeyHex);
         return this.keyService.getPrivateKeyHex(publicKeyHex);
     }
 
@@ -48,9 +51,12 @@ public class KeyController
     public String getPrivateKeyWIF(@RequestParam String publicKeyHex) throws IllegalArgumentException
     {
         if(publicKeyHex == null || publicKeyHex.isEmpty())
-            throw new IllegalArgumentException("public key hex cannot be null or empty.");
+        {
+            logger.error("Public key hex cannot be null or empty.");
+            throw new IllegalArgumentException("Public key hex cannot be null or empty.");
+        }
 
-        logger.info("Received request to get private key WIF");
+        logger.info("Received request to get private key WIF using public key:" + publicKeyHex);
         return this.keyService.getPrivateKeyWIF(publicKeyHex);
     }
 
@@ -59,10 +65,13 @@ public class KeyController
     public String derivePublicKeyHexFromPrivateKeyHex(@RequestParam String privateKeyHex, @RequestParam boolean compressed) throws IllegalArgumentException
     {
         if(privateKeyHex == null || privateKeyHex.isEmpty())
-            throw new IllegalArgumentException("private key hex cannot be null or empty.");
+        {
+            logger.error("Private key hex cannot be null or empty.");
+            throw new IllegalArgumentException("Private key hex cannot be null or empty.");
+        }
 
         logger.info("Received request to derive public key from: " + privateKeyHex);
-        return KeyServiceImpl.createPublicKeyHexFromPrivateKeyHex(privateKeyHex, compressed);
+        return KeyServiceImpl.derivePublicKeyHexFromPrivateKeyHex(privateKeyHex, compressed);
     }
 
 }
