@@ -61,6 +61,20 @@ public class KeyController
     }
 
     @CrossOrigin
+    @RequestMapping(value = "/convertHexToByteArray", method=GET)
+    public String convertHexToByteArray(@RequestParam String keyHex) throws IllegalArgumentException
+    {
+        if(keyHex == null || keyHex.isEmpty())
+        {
+            logger.error("Key hexadecimal cannot be null or empty.");
+            throw new IllegalArgumentException("Key hex cannot be null or empty.");
+        }
+
+        logger.info("Received request to convert hexadecimal key: " + keyHex + " to a byte array.");
+        return KeyServiceImpl.convertHexToByteArray(keyHex).toString();
+    }
+
+    @CrossOrigin
     @RequestMapping(value = "/derivePublicKey", method=GET)
     public String derivePublicKeyHexFromPrivateKeyHex(@RequestParam String privateKeyHex, @RequestParam boolean compressed) throws IllegalArgumentException
     {

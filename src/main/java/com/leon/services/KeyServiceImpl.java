@@ -31,18 +31,14 @@ public class KeyServiceImpl implements KeyService
 
     public static String derivePublicKeyHexFromPrivateKeyHex(String privateKeyHex, boolean compressed)
     {
-        byte[] privateKeyByteArray = createPrivateKeyByteArray(privateKeyHex);
-        ECKey newKey = ECKey.fromPrivate(privateKeyByteArray, compressed);
+        ECKey newKey = ECKey.fromPrivate(privateKeyHex.getBytes(), compressed);
         logger.info("Created public key: {} from private key hex: {}", newKey, privateKeyHex);
         return newKey.getPublicKeyAsHex();
     }
 
-    private static byte[] createPrivateKeyByteArray(String privateKey)
+    public static byte[] convertHexToByteArray(String keyHex)
     {
-        byte[] privateKeyByteArray = new byte[privateKey.length()/2];
-        for(int index = 0; index < privateKeyByteArray.length; ++index)
-            privateKeyByteArray[index] = (byte) Integer.parseInt(privateKey.substring(index, index + 2), 16);
-        return privateKeyByteArray;
+        return keyHex.getBytes();
     }
 
     @Override
