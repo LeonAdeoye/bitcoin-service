@@ -41,6 +41,17 @@ public class KeyServiceImpl implements KeyService
         return keyHex.getBytes();
     }
 
+    public static byte[] convertHexToByteArray2(String keyHex)
+    {
+
+        byte[] result = new byte[keyHex.length()/2];
+
+        for(int index = 0; index < keyHex.length(); ++index)
+            result[index] = (byte) Integer.parseInt(keyHex.substring(index, index + 2), 16);
+
+        return result;
+    }
+
     @Override
     public String getPrivateKeyHex(String publicKeyHex)
     {
