@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Arrays;
+
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 @RestController
@@ -71,7 +73,8 @@ public class KeyController
         }
 
         logger.info("Received request to convert hexadecimal key: " + keyHex + " to a byte array.");
-        return KeyServiceImpl.convertHexToByteArray(keyHex).toString();
+        byte[] result = KeyServiceImpl.convertHexToByteArray(keyHex);
+        return result.toString() + " >> "  + Arrays.toString(result);
     }
 
     @CrossOrigin
