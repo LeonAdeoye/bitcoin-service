@@ -1,6 +1,8 @@
 package com.leon.services;
 
+import org.bitcoinj.core.Address;
 import org.bitcoinj.params.TestNet3Params;
+import org.bitcoinj.script.Script;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -35,19 +37,6 @@ public class KeyServiceImpl implements KeyService
         return newKey.getPublicKeyAsHex();
     }
 
-    public static byte[] convertHexToByteArray(String keyHex)
-    {
-        byte[] result = new byte[keyHex.length()/2];
-
-        for(int index = 0; index < result.length; index++)
-        {
-            int step = index + 2;
-            result[index] = (byte) Integer.parseInt(keyHex.substring(step, step + 2), 16);
-        }
-
-        return result;
-    }
-
     @Override
     public String getPrivateKeyHex(String publicKeyHex)
     {
@@ -64,5 +53,19 @@ public class KeyServiceImpl implements KeyService
             return keys.get(publicKeyHex).getPrivateKeyAsWiF(TestNet3Params.get());
 
         return "";
+    }
+
+    public Address getAddress(String publicKeyHex, Script.ScriptType scriptType)
+    {
+        if(keys.containsKey(publicKeyHex))
+            return Address.fromKey(TestNet3Params.get(), keys.get(publicKeyHex), scriptType);
+
+        return null;
+    }
+
+    public static Address getAddressFromKey(String publicKeyHex, Script.ScriptType scriptType)
+    {
+        byte[] result = UtilityServiceImpl.convertHexToByteArray(publicKeyHex);
+        return Address.fromKey(TestNet3Params.get(), ECKey.fromPublicOnly(result), scriptType);
     }
 }

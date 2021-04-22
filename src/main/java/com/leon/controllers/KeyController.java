@@ -2,6 +2,7 @@ package com.leon.controllers;
 
 import com.leon.services.KeyService;
 import com.leon.services.KeyServiceImpl;
+import com.leon.services.UtilityServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -65,7 +66,7 @@ public class KeyController
         }
 
         logger.info("Received request to convert hexadecimal key: " + keyHex + " to a byte array.");
-        byte[] result = KeyServiceImpl.convertHexToByteArray(keyHex);
+        byte[] result = UtilityServiceImpl.convertHexToByteArray(keyHex);
         return result.toString();
     }
 
