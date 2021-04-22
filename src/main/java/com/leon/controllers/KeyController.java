@@ -1,6 +1,5 @@
 package com.leon.controllers;
 
-import com.leon.services.ConfigurationService;
 import com.leon.services.KeyService;
 import com.leon.services.KeyServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,9 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Arrays;
-
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 @RestController
@@ -20,10 +16,7 @@ public class KeyController
 {
     private static final Logger logger = LoggerFactory.getLogger(KeyController.class);
     @Autowired
-    private ConfigurationService configurationService;
-    @Autowired
     private KeyService keyService;
-
 
     @CrossOrigin
     @RequestMapping("/createNewKey")
@@ -46,7 +39,6 @@ public class KeyController
         logger.info("Received request to get private key in HEX using public key hex: " + publicKeyHex);
         return this.keyService.getPrivateKeyHex(publicKeyHex);
     }
-
 
     @CrossOrigin
     @RequestMapping(value = "/getPrivateKeyWIF", method=GET)

@@ -4,13 +4,10 @@ import org.bitcoinj.params.TestNet3Params;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-
 import org.bitcoinj.core.ECKey;
-
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
-
 
 @Service
 public class KeyServiceImpl implements KeyService

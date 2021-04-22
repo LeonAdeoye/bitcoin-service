@@ -33,14 +33,4 @@ public class MainController
         logger.info("Received request to reconfigure.");
         this.configurationService.reconfigure();
     }
-
-    @CrossOrigin
-    @RequestMapping("/init")
-    public void init()
-    {
-        logger.info("Received request to initialize wallet service.");
-        this.walletService.initialise();
-    }
-
-
 }
