@@ -17,4 +17,26 @@ public class UtilityServiceImpl
             return url;
     }
 
+    public static byte[] convertHexToByteArray(String keyHex)
+    {
+        byte[] result = new byte[keyHex.length()/2];
+
+        for(int index = 0; index < result.length; index++)
+        {
+            int step = index + 2;
+            result[index] = (byte) Integer.parseInt(keyHex.substring(step, step + 2), 16);
+        }
+
+        return result;
+    }
+
+    public static String convertByteArraytoHexadecimal(byte[] input)
+    {
+        StringBuilder sb = new StringBuilder();
+
+        for (byte b : input)
+            sb.append(String.format("%02X", b));
+
+        return sb.toString();
+    }
 }
