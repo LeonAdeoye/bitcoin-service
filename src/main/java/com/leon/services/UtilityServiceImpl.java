@@ -23,7 +23,7 @@ public class UtilityServiceImpl
 
         for(int index = 0; index < result.length; index++)
         {
-            int step = index + 2;
+            int step = index * 2;
             result[index] = (byte) Integer.parseInt(keyHex.substring(step, step + 2), 16);
         }
 
