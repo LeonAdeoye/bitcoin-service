@@ -53,7 +53,7 @@ public class UtilityServiceImpl
         try
         {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            return convertByteArrayToHexadecimal(digest.digest(stringToHash.getBytes(StandardCharsets.UTF_8)));
+            return UtilityServiceImpl.convertByteArrayToHexadecimal(digest.digest(UtilityServiceImpl.convertHexadecimalToByteArray(stringToHash)));
         }
         catch(NoSuchAlgorithmException nsae)
         {
