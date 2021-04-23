@@ -1,5 +1,7 @@
 package com.leon.services;
 
+import org.bitcoinj.core.Address;
+import org.bitcoinj.script.Script;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,7 +9,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.bitcoinj.core.ECKey;
+
 import java.util.Arrays;
+
 import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)
@@ -23,7 +27,6 @@ public class KeyServiceImplTest
     {
         // Act
         String publicKey = this.keyService.createNewKey();
-
         // Assert
         assertEquals("public key should be 2 compressed/uncompressed digits prefix of 03/04/02 plus 64 digits in length", 66, publicKey.length());
     }
@@ -41,11 +44,17 @@ public class KeyServiceImplTest
     }
 
     @Test
-    public void convertHexToByteArray_whenPassedValidHexadecimal_shouldReturnValidByteArray()
+    public void getAddress_whenPassedValidPublicKeyHex_shouldReturnValidAddress()
     {
+        ECKey k = ECKey.fromPublicOnly(UtilityServiceImpl.convertHexadecimalToByteArray("035acae7cac451d3dced05c166462d37ed60c5babd51b7c56ed8d1a7f31cfd0226"));
+
+        System.out.println("hash160: " + UtilityServiceImpl.convertByteArrayToHexadecimal(k.getPubKeyHash()) + " byte array length " + k.getPubKeyHash().length + " array: " + Arrays.toString(k.getPubKeyHash()));
         // Act
-        byte[] result = KeyServiceImpl.convertHexToByteArray("692c82187c51836b2beb16a614ee4d2a08bdc44800312ec72224119dc6fb2b6c");
+        Address result = keyService.getAddressFromKey("035acae7cac451d3dced05c166462d37ed60c5babd51b7c56ed8d1a7f31cfd0226", Script.ScriptType.P2PKH);
+
+        // address = 00C1EA467BD8CEB175450414934D913EBEBA145E49
+
         // Assert
-        assertEquals("should return valid byte array", Arrays.toString(result), "[44, -56, -126, 33, 24, -121, 124, -59, 81, 24, -125, 54, 107, -78, 43, -66, -21, -79, 22, 106, -90, 97, 20, 78, -18, -28, 77, -46, 42, -96, 8, -117]");
+        assertEquals("should return valid address from public key", result.toString(), "myCHMp5AA4shcGxM1aBwL3x5zunY5WopUo"); // Bitcoin testnet addresses start with m or n.
     }
 }

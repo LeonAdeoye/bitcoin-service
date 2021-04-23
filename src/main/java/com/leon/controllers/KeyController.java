@@ -56,7 +56,7 @@ public class KeyController
     }
 
     @CrossOrigin
-    @RequestMapping(value = "/convertHexToByteArray", method=GET)
+    @RequestMapping(value = "/convertHexadecimalToByteArray", method=GET)
     public String convertHexToByteArray(@RequestParam String keyHex) throws IllegalArgumentException
     {
         if(keyHex == null || keyHex.isEmpty())
@@ -66,7 +66,7 @@ public class KeyController
         }
 
         logger.info("Received request to convert hexadecimal key: " + keyHex + " to a byte array.");
-        byte[] result = UtilityServiceImpl.convertHexToByteArray(keyHex);
+        byte[] result = UtilityServiceImpl.convertHexadecimalToByteArray(keyHex);
         return result.toString();
     }
 

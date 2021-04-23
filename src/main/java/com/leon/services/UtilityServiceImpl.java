@@ -1,11 +1,19 @@
 package com.leon.services;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 @Service
 public class UtilityServiceImpl
 {
+    private static final Logger logger = LoggerFactory.getLogger(UtilityServiceImpl.class);
+
     @Value("${server.hostname}")
     private String hostname;
 
@@ -17,7 +25,7 @@ public class UtilityServiceImpl
             return url;
     }
 
-    public static byte[] convertHexToByteArray(String keyHex)
+    public static byte[] convertHexadecimalToByteArray(String keyHex)
     {
         byte[] result = new byte[keyHex.length()/2];
 
@@ -30,7 +38,7 @@ public class UtilityServiceImpl
         return result;
     }
 
-    public static String convertByteArraytoHexadecimal(byte[] input)
+    public static String convertByteArrayToHexadecimal(byte[] input)
     {
         StringBuilder sb = new StringBuilder();
 
@@ -38,5 +46,33 @@ public class UtilityServiceImpl
             sb.append(String.format("%02X", b));
 
         return sb.toString();
+    }
+
+    public static String hashWithSHA256(String stringToHash)
+    {
+        try
+        {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            return convertByteArrayToHexadecimal(digest.digest(stringToHash.getBytes(StandardCharsets.UTF_8)));
+        }
+        catch(NoSuchAlgorithmException nsae)
+        {
+           logger.error("Exception thrown:" + nsae.getMessage());
+           return "";
+        }
+    }
+
+    public static byte[] hashWithSHA256(byte[] byteArrayToHash)
+    {
+        try
+        {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            return digest.digest(byteArrayToHash);
+        }
+        catch(NoSuchAlgorithmException nsae)
+        {
+            logger.error("Exception thrown:" + nsae.getMessage());
+            return new byte[] {};
+        }
     }
 }

@@ -59,7 +59,7 @@ public class UtilityServiceTest
     public void convertHexToByteArray_whenPassedValidHexadecimal_shouldReturnValidByteArray()
     {
         // Act
-        byte[] result = UtilityServiceImpl.convertHexToByteArray("692c82187c51836b2beb16a614ee4d2a08bdc44800312ec72224119dc6fb2b6c");
+        byte[] result = UtilityServiceImpl.convertHexadecimalToByteArray("692c82187c51836b2beb16a614ee4d2a08bdc44800312ec72224119dc6fb2b6c");
         // Assert
         assertEquals("should return valid byte array", Arrays.toString(result), "[105, 44, -126, 24, 124, 81, -125, 107, 43, -21, 22, -90, 20, -18, 77, 42, 8, -67, -60, 72, 0, 49, 46, -57, 34, 36, 17, -99, -58, -5, 43, 108]");
     }
@@ -68,9 +68,9 @@ public class UtilityServiceTest
     public void convertByteArrayToHex_whenPassedValidByteArray_shouldReturnValidHexadecimal()
     {
         // Arrange
-        byte[] byteArray = UtilityServiceImpl.convertHexToByteArray("692c82187c51836b2beb16a614ee4d2a08bdc44800312ec72224119dc6fb2b6c");
+        byte[] byteArray = UtilityServiceImpl.convertHexadecimalToByteArray("692c82187c51836b2beb16a614ee4d2a08bdc44800312ec72224119dc6fb2b6c");
         // Act
-        String hexadecimal = UtilityServiceImpl.convertByteArraytoHexadecimal(byteArray);
+        String hexadecimal = UtilityServiceImpl.convertByteArrayToHexadecimal(byteArray);
         // Assert
         assertEquals("should return valid byte array", hexadecimal, "692c82187c51836b2beb16a614ee4d2a08bdc44800312ec72224119dc6fb2b6c".toUpperCase());
     }

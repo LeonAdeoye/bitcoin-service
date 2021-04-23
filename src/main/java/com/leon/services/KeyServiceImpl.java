@@ -65,7 +65,7 @@ public class KeyServiceImpl implements KeyService
 
     public static Address getAddressFromKey(String publicKeyHex, Script.ScriptType scriptType)
     {
-        byte[] result = UtilityServiceImpl.convertHexToByteArray(publicKeyHex);
+        byte[] result = UtilityServiceImpl.convertHexadecimalToByteArray(publicKeyHex);
         return Address.fromKey(TestNet3Params.get(), ECKey.fromPublicOnly(result), scriptType);
     }
 }
