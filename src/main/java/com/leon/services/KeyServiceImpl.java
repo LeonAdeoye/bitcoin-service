@@ -1,8 +1,7 @@
 package com.leon.services;
 
-import org.bitcoinj.core.Address;
+import org.bitcoinj.core.Base58;
 import org.bitcoinj.params.TestNet3Params;
-import org.bitcoinj.script.Script;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -55,17 +54,19 @@ public class KeyServiceImpl implements KeyService
         return "";
     }
 
-    public Address getAddress(String publicKeyHex, Script.ScriptType scriptType)
+    public static String getAddressFromPublicKey(String publicKeyHex)
     {
-        if(keys.containsKey(publicKeyHex))
-            return Address.fromKey(TestNet3Params.get(), keys.get(publicKeyHex), scriptType);
+        ECKey k = ECKey.fromPublicOnly(UtilityServiceImpl.convertHexadecimalToByteArray(publicKeyHex));
 
-        return null;
-    }
+        // First create the 20 bytes public key HASH160 'payload' and then prefix with 00 for bitcoin address.
+        String versionedPayload = "00" + UtilityServiceImpl.convertByteArrayToHexadecimal(k.getPubKeyHash());
 
-    public static Address getAddressFromKey(String publicKeyHex, Script.ScriptType scriptType)
-    {
-        byte[] result = UtilityServiceImpl.convertHexadecimalToByteArray(publicKeyHex);
-        return Address.fromKey(TestNet3Params.get(), ECKey.fromPublicOnly(result), scriptType);
+        // Double SHA256 hash the concatenation of the prefix and HASH160 payload and extract the first 4 bytes for the checksum.
+        String checksum = UtilityServiceImpl.hashWithSHA256(UtilityServiceImpl.hashWithSHA256(versionedPayload)).substring(0,8);
+
+        // Create a byte array from the concatenation of the versioned payload and the checksum
+        byte[] versionedPayloadWithChecksumByteArray = UtilityServiceImpl.convertHexadecimalToByteArray(versionedPayload + checksum);
+
+        return Base58.encode(versionedPayloadWithChecksumByteArray);
     }
 }
