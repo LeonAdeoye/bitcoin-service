@@ -46,4 +46,15 @@ public class KeyServiceImplTest
         // Assert
         assertEquals("should return valid address from public key", result, "1PRTTaJesdNovgne6Ehcdu1fpEdX7913CK");
     }
+
+    @Test
+    public void generateVanityAddress_whenPassedValidPattern_shouldReturnVanityAddress()
+    {
+        // Arrange
+        String vanityPattern = "Leo";
+        // Act
+        String result = KeyServiceImpl.generateVanityAddress(vanityPattern);
+        // Assert
+        assertEquals("should return valid address from public key", result.substring(0,vanityPattern.length() + 1), "1" + vanityPattern);
+    }
 }

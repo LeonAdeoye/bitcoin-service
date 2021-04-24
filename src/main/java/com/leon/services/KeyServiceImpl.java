@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.bitcoinj.core.ECKey;
 import java.math.BigInteger;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -68,5 +70,27 @@ public class KeyServiceImpl implements KeyService
         byte[] versionedPayloadWithChecksumByteArray = UtilityServiceImpl.convertHexadecimalToByteArray(versionedPayload + checksum);
 
         return Base58.encode(versionedPayloadWithChecksumByteArray);
+    }
+
+    public static String generateVanityAddress(String vanityPattern)
+    {
+        if(vanityPattern.length() > 4)
+            throw new IllegalArgumentException("string length of prefix cannot exceed 4 characters");
+
+        Instant startTime = Instant.now();
+        String result = "";
+        int attempts = 0;
+        boolean notFound = true;
+        while(notFound)
+        {
+            attempts++;
+            ECKey key = new ECKey();
+            result = getAddressFromPublicKey(key.getPublicKeyAsHex());
+            notFound = !result.substring(0,vanityPattern.length() + 1).equals("1" + vanityPattern);
+        }
+        Instant endTime = Instant.now();
+        logger.info("Created new vanity address: [" + result + "] after " + attempts + " attempts and it took " + Duration.between(endTime, startTime).toMillis() + " ms.");
+
+        return result;
     }
 }

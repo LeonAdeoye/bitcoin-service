@@ -84,4 +84,18 @@ public class KeyController
         return KeyServiceImpl.derivePublicKeyHexFromPrivateKeyHex(privateKeyHex);
     }
 
+    @CrossOrigin
+    @RequestMapping(value = "/generateAddress", method=GET)
+    public String getAddressFromPublicKey(@RequestParam String publicKeyHex) throws IllegalArgumentException
+    {
+        if(publicKeyHex == null || publicKeyHex.isEmpty())
+        {
+            logger.error("Public key hexadecimal cannot be null or empty.");
+            throw new IllegalArgumentException("Public key hexadecimal cannot be null or empty.");
+        }
+
+        logger.info("Received request to generate a bitcoin address from a public key hexadecimal: " + publicKeyHex);
+        return KeyServiceImpl.getAddressFromPublicKey(publicKeyHex);
+    }
+
 }
