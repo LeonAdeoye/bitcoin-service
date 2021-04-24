@@ -1,8 +1,13 @@
 package com.leon.services;
 import com.leon.models.Configuration;
+import org.bitcoinj.core.NetworkParameters;
+import org.bitcoinj.params.MainNetParams;
+import org.bitcoinj.params.RegTestParams;
+import org.bitcoinj.params.TestNet3Params;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.util.*;
@@ -16,6 +21,10 @@ public class ConfigurationServiceImpl implements ConfigurationService
 
     private static final String THIS_COMPONENT_NAME = "bitcoin-service";
 
+    @Value("${session}")
+    private static String session;
+    private static NetworkParameters networkParams = null;
+
     @Autowired
     private MessagingService messagingService;
 
@@ -27,6 +36,23 @@ public class ConfigurationServiceImpl implements ConfigurationService
     public void initialize()
     {
         loadAllConfigurations();
+
+        logger.info("Session configuration: " + session);
+    }
+
+    public static NetworkParameters getNetworkParams()
+    {
+        if(networkParams == null)
+        {
+            if (session.equals("testnet"))
+                networkParams = TestNet3Params.get();
+            else if (session.equals("regtest"))
+                networkParams = RegTestParams.get();
+            else
+                networkParams = MainNetParams.get();
+        }
+
+        return networkParams;
     }
 
     @Override
@@ -49,5 +75,10 @@ public class ConfigurationServiceImpl implements ConfigurationService
     public void reconfigure()
     {
         this.loadAllConfigurations();
+    }
+
+    public NetworkParameters getNetworkParamters()
+    {
+        return this.networkParams;
     }
 }

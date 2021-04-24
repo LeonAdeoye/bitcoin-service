@@ -1,11 +1,15 @@
 package com.leon.services;
 
+import org.bitcoinj.core.BlockChain;
 import org.bitcoinj.core.ECKey;
 import org.bitcoinj.core.NetworkParameters;
+import org.bitcoinj.core.PeerGroup;
 import org.bitcoinj.kits.WalletAppKit;
-import org.bitcoinj.params.TestNet3Params;
+import org.bitcoinj.wallet.KeyChainGroup;
+import org.bitcoinj.wallet.Wallet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.io.File;
@@ -18,6 +22,9 @@ public class WalletServiceImpl implements WalletService
 
     private static WalletAppKit kit;
 
+    @Autowired
+    ConfigurationService configurationService;
+
     public WalletServiceImpl()
     {
     }
@@ -25,19 +32,29 @@ public class WalletServiceImpl implements WalletService
     @PostConstruct
     public void initialise()
     {
-        NetworkParameters params;
-        String filePrefix;
+        String filePrefix = "bitcoin-service";
 
-        params = TestNet3Params.get();
-        filePrefix = "bitcoin-service";
-        logger.info("Network: " + params.getId());
+        NetworkParameters networkParameters = ConfigurationServiceImpl.getNetworkParams();
 
-        // Start up a basic app using a class that automates some boilerplate.
-        kit = new WalletAppKit(params, new File("."), filePrefix);
+//        kit = new WalletAppKit(networkParameters, new File("."), filePrefix);
+//
+//        KeyChainGroup group = new KeyChainGroup(networkParameters, true);
+//        Wallet wallet = new Wallet(networkParameters, group);
     }
 
     public void addKey(String privateKeyAsHex)
     {
-        //kit.wallet().importKey(new ECKey().fromPrivate(new BigInteger(privateKeyAsHex, 16)));
+        //wallet.importKey(new ECKey().fromPrivate(new BigInteger(privateKeyAsHex, 16)));
+    }
+
+    public void addKey(ECKey key)
+    {
+        //kit.wallet().importKey(key);
+    }
+
+    public boolean hasKey(ECKey key)
+    {
+        //return kit.wallet().hasKey(key);
+        return false;
     }
 }
