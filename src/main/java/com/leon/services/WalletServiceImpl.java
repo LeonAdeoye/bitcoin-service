@@ -45,6 +45,14 @@ public class WalletServiceImpl implements WalletService
     }
 
     @Override
+    public String addKey(ECKey key)
+    {
+        wallet.importKey(key);
+        logger.info("Imported key with public key: " + key.getPubKey());
+        return UtilityServiceImpl.convertByteArrayToHexadecimal(key.getPubKey());
+    }
+
+    @Override
     public int addKeys(List<String> privateKeysAsHex)
     {
         privateKeysAsHex.stream().forEach(privateKeyAsHex ->
@@ -56,6 +64,12 @@ public class WalletServiceImpl implements WalletService
 
         logger.info("Imported a list of " + privateKeysAsHex.size() + " keys.");
         return privateKeysAsHex.size();
+    }
+
+    @Override
+    public boolean hasKey(ECKey key)
+    {
+        return wallet.hasKey(key);
     }
 
     @Override
