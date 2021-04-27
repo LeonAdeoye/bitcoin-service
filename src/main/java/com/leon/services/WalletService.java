@@ -10,4 +10,6 @@ public interface WalletService
     int addKeys(List<String> privateKeysAsHex);
     boolean hasKey(ECKey key);
     boolean hasKey(String publicKeyAsHex);
+    void createNondeterministicKeys(int numberOfKeys);
+    void saveWallet();
 }

@@ -82,4 +82,17 @@ public class WalletServiceImpl implements WalletService
         }
         return false;
     }
+
+    @Override
+    public void createNondeterministicKeys(int numberOfKeys)
+    {
+        for(int count = 0; count < numberOfKeys; ++count)
+            wallet.importKey(new ECKey());
+    }
+
+    @Override
+    public void saveWallet()
+    {
+
+    }
 }
