@@ -35,27 +35,37 @@ public class WalletServiceImpl implements WalletService
         wallet = new Wallet(networkParameters, group);
     }
 
-    public void addKey(String privateKeyAsHex)
+    @Override
+    public String addKey(String privateKeyAsHex)
     {
         ECKey newKey = new ECKey().fromPrivate(new BigInteger(privateKeyAsHex, 16));
         wallet.importKey(newKey);
         logger.info("Imported key with public key: " + newKey.getPubKey());
+        return UtilityServiceImpl.convertByteArrayToHexadecimal(newKey.getPubKey());
     }
 
-    public void addKey(ECKey key)
+    @Override
+    public int addKeys(List<String> privateKeysAsHex)
     {
-        wallet.importKey(key);
-        logger.info("Imported key with public key: " + key.getPubKey());
+        privateKeysAsHex.stream().forEach(privateKeyAsHex ->
+        {
+            ECKey newKey = new ECKey().fromPrivate(new BigInteger(privateKeyAsHex, 16));
+            wallet.importKey(newKey);
+            logger.info("Imported key with public key: " + newKey.getPubKey());
+        });
+
+        logger.info("Imported a list of " + privateKeysAsHex.size() + " keys.");
+        return privateKeysAsHex.size();
     }
 
-    public void addKeys(List<ECKey> keys)
+    @Override
+    public boolean hasKey(String publicKeyAsHex)
     {
-        wallet.importKeys(keys);
-        logger.info("Imported a list of " + keys.size() + " keys.");
-    }
-
-    public boolean hasKey(ECKey key)
-    {
-        return wallet.hasKey(key);
+        for(int index = 0; index < wallet.getImportedKeys().size(); ++index)
+        {
+            if(wallet.getImportedKeys().get(index).getPubKey().equals(publicKeyAsHex))
+                return true;
+        }
+        return false;
     }
 }
