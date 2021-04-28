@@ -1,19 +1,19 @@
 package com.leon.services;
 
-import org.bitcoinj.core.ECKey;
-import org.bitcoinj.core.NetworkParameters;
+import org.bitcoinj.core.*;
+import org.bitcoinj.store.MemoryBlockStore;
 import org.bitcoinj.wallet.KeyChainGroup;
 import org.bitcoinj.wallet.Wallet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -23,6 +23,7 @@ public class WalletServiceImpl implements WalletService
     private static final Logger logger = LoggerFactory.getLogger(WalletServiceImpl.class);
 
     private static Wallet wallet;
+    private BlockChain blockChain;
 
     private String walletName = "bitcoin-service-wallet";
 
@@ -46,10 +47,22 @@ public class WalletServiceImpl implements WalletService
     @PostConstruct
     public void initialise()
     {
-        NetworkParameters networkParameters = ConfigurationServiceImpl.getNetworkParams();
-        KeyChainGroup group = KeyChainGroup.createBasic(networkParameters);
-        wallet = new Wallet(networkParameters, group);
-        wallet.autosaveToFile(new File(getWalletName()),300, TimeUnit.SECONDS, null);
+        try
+        {
+            NetworkParameters networkParameters = ConfigurationServiceImpl.getNetworkParams();
+            KeyChainGroup keyChainGroup = KeyChainGroup.createBasic(networkParameters);
+            wallet = new Wallet(networkParameters, keyChainGroup);
+            wallet.autosaveToFile(new File(getWalletName()), 300, TimeUnit.SECONDS, null);
+            blockChain = new BlockChain(networkParameters, wallet, new MemoryBlockStore(networkParameters));
+            PeerGroup peerGroup = new PeerGroup(networkParameters, blockChain);
+            peerGroup.addWallet(wallet);
+
+        }
+        catch(Exception e)
+        {
+            logger.error(e.getMessage());
+        }
+
     }
 
     @PreDestroy
