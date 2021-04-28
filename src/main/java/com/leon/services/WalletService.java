@@ -11,5 +11,4 @@ public interface WalletService
     boolean hasKey(ECKey key);
     boolean hasKey(String publicKeyAsHex);
     void createNondeterministicKeys(int numberOfKeys);
-    void saveWallet();
 }

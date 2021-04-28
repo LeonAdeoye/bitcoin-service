@@ -9,8 +9,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import java.io.File;
+import java.io.IOException;
 import java.math.BigInteger;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class WalletServiceImpl implements WalletService
@@ -19,6 +24,8 @@ public class WalletServiceImpl implements WalletService
 
     private static Wallet wallet;
 
+    private String walletName = "bitcoin-service";
+
     @Autowired
     ConfigurationService configurationService;
 
@@ -26,13 +33,29 @@ public class WalletServiceImpl implements WalletService
     {
     }
 
+    public void setWalletName(String walletName)
+    {
+        this.walletName = walletName;
+    }
+
+    public String getWalletName()
+    {
+        return walletName;
+    }
+
     @PostConstruct
     public void initialise()
     {
-        String filePrefix = "bitcoin-service";
         NetworkParameters networkParameters = ConfigurationServiceImpl.getNetworkParams();
         KeyChainGroup group = KeyChainGroup.createBasic(networkParameters);
         wallet = new Wallet(networkParameters, group);
+        wallet.autosaveToFile(new File(getWalletName()),300, TimeUnit.SECONDS, null);
+    }
+
+    @PreDestroy
+    public void close()
+    {
+        saveWalletToFile(getWalletName());
     }
 
     @Override
@@ -75,12 +98,7 @@ public class WalletServiceImpl implements WalletService
     @Override
     public boolean hasKey(String publicKeyAsHex)
     {
-        for(int index = 0; index < wallet.getImportedKeys().size(); ++index)
-        {
-            if(wallet.getImportedKeys().get(index).getPubKey().equals(publicKeyAsHex))
-                return true;
-        }
-        return false;
+        return wallet.isPubKeyMine(UtilityServiceImpl.convertHexadecimalToByteArray(publicKeyAsHex));
     }
 
     @Override
@@ -90,9 +108,15 @@ public class WalletServiceImpl implements WalletService
             wallet.importKey(new ECKey());
     }
 
-    @Override
-    public void saveWallet()
+    private void saveWalletToFile(String fileName)
     {
-
+        try
+        {
+            wallet.saveToFile(new File(fileName));
+        }
+        catch(IOException ioe)
+        {
+            logger.error(ioe.getMessage());
+        }
     }
 }
