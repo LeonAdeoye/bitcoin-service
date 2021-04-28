@@ -22,7 +22,7 @@ public class ConfigurationServiceImpl implements ConfigurationService
     private static final String THIS_COMPONENT_NAME = "bitcoin-service";
 
     @Value("${session}")
-    private static String session;
+    private static String session = "testnet";
     private static NetworkParameters networkParams = null;
 
     @Autowired

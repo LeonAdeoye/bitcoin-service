@@ -24,7 +24,7 @@ public class WalletServiceImpl implements WalletService
 
     private static Wallet wallet;
 
-    private String walletName = "bitcoin-service";
+    private String walletName = "bitcoin-service-wallet";
 
     @Autowired
     ConfigurationService configurationService;

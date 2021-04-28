@@ -15,8 +15,6 @@ public class MainController
     private static final Logger logger = LoggerFactory.getLogger(MainController.class);
     @Autowired
     private ConfigurationService configurationService;
-    @Autowired
-    private WalletService walletService;
 
     @RequestMapping("/heartbeat")
     public String heartBeat()
