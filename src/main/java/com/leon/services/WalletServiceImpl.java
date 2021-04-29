@@ -52,10 +52,8 @@ public class WalletServiceImpl implements WalletService
             NetworkParameters networkParameters = ConfigurationServiceImpl.getNetworkParams();
             KeyChainGroup keyChainGroup = KeyChainGroup.createBasic(networkParameters);
             wallet = new Wallet(networkParameters, keyChainGroup);
+            // TODO revisit the file saving...
             wallet.autosaveToFile(new File(getWalletName()), 300, TimeUnit.SECONDS, null);
-            blockChain = new BlockChain(networkParameters, wallet, new MemoryBlockStore(networkParameters));
-            PeerGroup peerGroup = new PeerGroup(networkParameters, blockChain);
-            peerGroup.addWallet(wallet);
 
         }
         catch(Exception e)
@@ -121,6 +119,7 @@ public class WalletServiceImpl implements WalletService
             wallet.importKey(new ECKey());
     }
 
+    // TODO is this needed and is it done correctly
     private void saveWalletToFile(String fileName)
     {
         try
