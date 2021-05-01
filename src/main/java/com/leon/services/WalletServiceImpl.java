@@ -101,6 +101,13 @@ public class WalletServiceImpl implements WalletService
     }
 
     @Override
+    public int getKeyCount()
+    {
+        wallet.cleanup();
+        return wallet.getKeyChainGroupSize();
+    }
+
+    @Override
     public boolean hasKey(ECKey key)
     {
         return wallet.hasKey(key);
