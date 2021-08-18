@@ -42,9 +42,14 @@ public class KeyServiceImplTest
     public void getAddressFromPublicKey_whenPassedValidPublicKeyHex_shouldReturnValidBitcoinAddress()
     {
         // Act
-        String result = KeyServiceImpl.getAddressFromPublicKey("0202a406624211f2abbdc68da3df929f938c3399dd79fac1b51b0e4ad1d26a47aa");
+        String result = KeyServiceImpl.getAddressFromCompressedPublicKey("0202a406624211f2abbdc68da3df929f938c3399dd79fac1b51b0e4ad1d26a47aa");
         // Assert
         assertEquals("should return valid address from public key", result, "1PRTTaJesdNovgne6Ehcdu1fpEdX7913CK");
+
+        // Act
+        result = KeyServiceImpl.getAddressFromCompressedPublicKey("025c0de3b9c8ab18dd04e3511243ec2952002dbfadc864b9628910169d9b9b00ec");
+        // Assert
+        assertEquals("should return valid address from public key", result, "14cxpo3MBCYYWCgF74SWTdcmxipnGUsPw3");
     }
 
     @Test

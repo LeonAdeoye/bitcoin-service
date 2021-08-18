@@ -56,7 +56,7 @@ public class KeyServiceImpl implements KeyService
         return "";
     }
 
-    public static String getAddressFromPublicKey(String publicKeyHex)
+    public static String getAddressFromCompressedPublicKey(String publicKeyHex)
     {
         ECKey k = ECKey.fromPublicOnly(UtilityServiceImpl.convertHexadecimalToByteArray(publicKeyHex));
 
@@ -85,7 +85,7 @@ public class KeyServiceImpl implements KeyService
         {
             attempts++;
             ECKey key = new ECKey();
-            result = getAddressFromPublicKey(key.getPublicKeyAsHex());
+            result = getAddressFromCompressedPublicKey(key.getPublicKeyAsHex());
             notFound = !result.substring(0,vanityPattern.length() + 1).equals("1" + vanityPattern);
         }
         Instant endTime = Instant.now();

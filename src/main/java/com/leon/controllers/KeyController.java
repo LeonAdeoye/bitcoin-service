@@ -95,7 +95,7 @@ public class KeyController
         }
 
         logger.info("Received request to generate a bitcoin address from a public key hexadecimal: " + publicKeyHex);
-        return KeyServiceImpl.getAddressFromPublicKey(publicKeyHex);
+        return KeyServiceImpl.getAddressFromCompressedPublicKey(publicKeyHex);
     }
 
 }

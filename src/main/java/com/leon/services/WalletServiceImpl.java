@@ -1,7 +1,6 @@
 package com.leon.services;
 
 import org.bitcoinj.core.*;
-import org.bitcoinj.store.MemoryBlockStore;
 import org.bitcoinj.wallet.KeyChainGroup;
 import org.bitcoinj.wallet.Wallet;
 import org.slf4j.Logger;
