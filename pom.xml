@@ -14,9 +14,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.leon</groupId>
-            <artifactId>bitcoinj</artifactId>
-            <version>0.1.0</version>
+            <groupId>org.bitcoinj</groupId>
+            <artifactId>bitcoinj-core</artifactId>
+            <version>0.15.10</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
