@@ -50,13 +50,11 @@ public class SignatureServiceImpl
         KeyPair keyPair = createKeyPair();
         String signature = createSignature(plainText, keyPair);
         String publicKey = Base64.getEncoder().encodeToString(keyPair.getPublic().getEncoded());
-
         JSONObject signedMessage = new JSONObject();
         signedMessage.put("publicKey", publicKey);
         signedMessage.put("signature", signature);
         signedMessage.put("message", plainText);
         signedMessage.put("algorithm", ALGO);
-
         return signedMessage;
     }
 
@@ -64,10 +62,8 @@ public class SignatureServiceImpl
     {
         Signature ecdsaVerify = Signature.getInstance(signedMessage.getString("algorithm"));
         EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(Base64.getDecoder().decode(signedMessage.getString("publicKey")));
-
         KeyFactory keyFactory = KeyFactory.getInstance("EC");
         PublicKey publicKey = keyFactory.generatePublic(publicKeySpec);
-
         ecdsaVerify.initVerify(publicKey);
         ecdsaVerify.update(signedMessage.getString("message").getBytes("UTF-8"));
         return ecdsaVerify.verify(Base64.getDecoder().decode(signedMessage.getString("signature")));
@@ -79,8 +75,11 @@ public class SignatureServiceImpl
         {
             SignatureServiceImpl signatureService = new SignatureServiceImpl();
             JSONObject signedMessage = signatureService.createSignedMessage("Hello Horatio");
+
             if(signatureService.verifySignedMessage(signedMessage))
-                logger.info("Signature valid");
+                logger.info("Signature Valid");
+            else
+                logger.info("Signature Invalid");
         }
         catch (NoSuchAlgorithmException ex)
         {
